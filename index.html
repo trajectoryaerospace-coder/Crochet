@@ -34,7 +34,7 @@
       position: relative;
     }
 
-    /* Floating Background Animations (Sunflowers & Hearts) */
+    /* Floating Background Animations */
     .bg-floating-container {
       position: fixed;
       top: 0;
@@ -65,7 +65,6 @@
       }
     }
 
-    /* Staggered positioning for floating items */
     .float-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s; }
     .float-item:nth-child(2)  { left: 18%; animation-duration: 12s; animation-delay: 2s; }
     .float-item:nth-child(3)  { left: 32%; animation-duration: 8s;  animation-delay: 4s; }
@@ -77,7 +76,7 @@
     .float-item:nth-child(9)  { left: 55%; animation-duration: 10s; animation-delay: 2.5s; }
     .float-item:nth-child(10) { left: 82%; animation-duration: 11s; animation-delay: 0.5s; }
 
-    /* Mobile Container App Layout */
+    /* App Viewport */
     .app-viewport {
       width: 100%;
       max-width: 480px;
@@ -88,7 +87,7 @@
       position: relative;
       z-index: 1;
       box-shadow: 0 0 25px rgba(255, 107, 139, 0.2);
-      padding-bottom: 100px; /* Generous space so content is never hidden behind the fixed bar */
+      padding-bottom: 100px;
     }
 
     header {
@@ -117,7 +116,7 @@
       font-weight: 600;
     }
 
-    /* STRICTLY LOCKED & ALWAYS VISIBLE BOTTOM BAR */
+    /* BOTTOM NAV - 3 TABS */
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
@@ -133,7 +132,7 @@
       padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
       border-top: 3.5px solid var(--primary-pink);
       box-shadow: 0 -8px 25px rgba(255, 107, 139, 0.3);
-      z-index: 999999; /* Guarantees it floats over iframe videos and long lists */
+      z-index: 999999;
     }
 
     .nav-btn {
@@ -143,12 +142,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       color: #7a4652;
       cursor: pointer;
       font-weight: 700;
-      width: 23%;
-      padding: 6px 4px;
+      width: 31%;
+      padding: 8px 4px;
       border-radius: 12px;
       transition: all 0.2s ease-in-out;
     }
@@ -159,7 +158,6 @@
       transition: transform 0.2s ease;
     }
 
-    /* Active Tab Highlight Styling */
     .nav-btn.active {
       color: #d81b60;
       background: #ffe6ec;
@@ -171,7 +169,6 @@
       transform: scale(1.15);
     }
 
-    /* Content Area */
     .content-area {
       padding: 14px;
       flex: 1;
@@ -230,7 +227,6 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* Card Action Controls (Edit & Delete Buttons) */
     .card-actions {
       display: flex;
       justify-content: flex-end;
@@ -257,7 +253,6 @@
       color: white;
     }
 
-    /* Remember Counter Styling */
     .remember-item {
       background: #fffdf0;
       border-left: 5px solid var(--sunflower-yellow);
@@ -290,7 +285,6 @@
       cursor: pointer;
     }
 
-    /* Technique Card Styling */
     .technique-card {
       background: white;
       border-radius: 16px;
@@ -312,7 +306,6 @@
       margin-bottom: 6px;
     }
 
-    /* Custom Animated SVG Diagrams */
     .diagram-box {
       width: 100%;
       height: 110px;
@@ -326,7 +319,6 @@
       overflow: hidden;
     }
 
-    /* Diagram Animations */
     @keyframes magic-ring-anim {
       0% { transform: scale(0.6); opacity: 0.4; }
       50% { transform: scale(1.1); opacity: 1; }
@@ -350,7 +342,6 @@
     }
     .anim-chain { animation: loop-chain-anim 1.8s infinite ease-in-out; }
 
-    /* Video Embed Container */
     .video-container {
       position: relative;
       padding-bottom: 56.25%;
@@ -359,6 +350,7 @@
       overflow: hidden;
       margin-top: 10px;
       border: 1px solid var(--soft-pink);
+      background: #000;
     }
 
     .video-container iframe {
@@ -417,9 +409,9 @@
             <option value="Advanced">Advanced</option>
           </select>
           <input type="text" id="t-abbrev" placeholder="Abbreviation (e.g. MC, SC, DC)">
-          <input type="text" id="t-videoId" placeholder="YouTube Video ID (Optional)">
+          <input type="text" id="t-videoUrl" placeholder="YouTube Video Link or Video ID">
           <textarea id="t-desc" placeholder="Short technique explanation..."></textarea>
-          <button type="submit" class="action-btn">+ Add Custom Technique</button>
+          <button type="submit" class="action-btn">+ Add Technique</button>
         </form>
       </div>
 
@@ -441,18 +433,6 @@
       <div id="journal-list"></div>
     </div>
 
-    <div id="tutorials" class="tab-content">
-      <div class="card">
-        <h2>📹 Search Any Tutorial</h2>
-        <input type="text" id="yt-search-input" placeholder="Search stitch or technique (e.g. granny square)">
-        <button onclick="searchYouTube()" class="action-btn">Search YouTube</button>
-        
-        <div class="video-container" style="margin-top: 15px;">
-          <iframe id="yt-hub-frame" src="https://www.youtube.com/embed/wgVOkQcf5qw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <nav class="bottom-nav">
@@ -465,9 +445,6 @@
     <button class="nav-btn" onclick="navTab('journal', this)">
       <span class="icon">📖</span>Journal
     </button>
-    <button class="nav-btn" onclick="navTab('tutorials', this)">
-      <span class="icon">📹</span>Tutorials
-    </button>
   </nav>
 </div>
 
@@ -479,6 +456,15 @@
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
     window.scrollTo(0,0);
+  }
+
+  // --- Helper to Extract YouTube Video ID from Link or ID string ---
+  function extractYouTubeId(input) {
+    if (!input) return 'wgVOkQcf5qw';
+    input = input.trim();
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = input.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : input;
   }
 
   // --- 1. REMEMBER THINGY LOGIC ---
@@ -533,7 +519,7 @@
     });
   }
 
-  // --- 2. CROCHET TECHNIQUES & PRECISE DIRECT VIDEO EMBEDS ---
+  // --- 2. CROCHET TECHNIQUES WITH WORKING VIDEO LINKS ---
   const defaultTechniques = [
     {
       id: 1,
@@ -541,7 +527,7 @@
       abbrev: "MC / MR",
       diff: "Beginner",
       diagramType: "ring",
-      videoId: "WLTY_-31Ztk",
+      videoId: "p298HxgsO1s",
       desc: "An adjustable starting loop used for working in the round."
     },
     {
@@ -578,15 +564,17 @@
   document.getElementById('custom-tech-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const title = document.getElementById('t-title').value;
-    const customVid = document.getElementById('t-videoId').value.trim();
+    const inputVideo = document.getElementById('t-videoUrl').value;
+    const vidId = extractYouTubeId(inputVideo);
+
     techniques.unshift({
       id: Date.now(),
       title: title,
       abbrev: document.getElementById('t-abbrev').value || 'ST',
       diff: document.getElementById('t-diff').value,
       diagramType: 'wave',
-      videoId: customVid || 'wgVOkQcf5qw',
-      desc: document.getElementById('t-desc').value || 'Custom added technique.'
+      videoId: vidId,
+      desc: document.getElementById('t-desc').value || 'Custom technique.'
     });
     localStorage.setItem('z_techniques', JSON.stringify(techniques));
     renderTechniques();
@@ -603,12 +591,16 @@
     const newAbbrev = prompt("Edit Abbreviation:", tech.abbrev);
     if (newAbbrev === null) return;
 
+    const newVid = prompt("Edit YouTube Video Link or ID:", tech.videoId);
+    if (newVid === null) return;
+
     const newDesc = prompt("Edit Description:", tech.desc);
     if (newDesc === null) return;
 
-    if (confirm("Are you sure you want to save these edits to this technique?")) {
+    if (confirm("Save changes to this technique?")) {
       tech.title = newTitle.trim() || tech.title;
       tech.abbrev = newAbbrev.trim() || tech.abbrev;
+      tech.videoId = extractYouTubeId(newVid);
       tech.desc = newDesc.trim() || tech.desc;
       localStorage.setItem('z_techniques', JSON.stringify(techniques));
       renderTechniques();
@@ -693,7 +685,7 @@
     });
   }
 
-  // --- 3. PROJECT JOURNAL & EDIT/DELETE LOGIC ---
+  // --- 3. PROJECT JOURNAL LOGIC ---
   let projects = JSON.parse(localStorage.getItem('z_projects')) || [];
 
   document.getElementById('journal-form').addEventListener('submit', (e) => {
@@ -738,7 +730,7 @@
     const newNotes = prompt("Edit Notes:", proj.notes);
     if (newNotes === null) return;
 
-    if (confirm("Are you sure you want to save changes to this journal entry?")) {
+    if (confirm("Save changes to this project entry?")) {
       proj.title = newTitle.trim() || proj.title;
       proj.color = newColor.trim() || proj.color;
       proj.time = newTime.trim() || proj.time;
@@ -774,14 +766,6 @@
         </div>
       `;
     });
-  }
-
-  // --- 4. YOUTUBE SEARCH HUB LOGIC ---
-  function searchYouTube() {
-    const query = document.getElementById('yt-search-input').value.trim();
-    if (query) {
-      window.open(`https://www.youtube.com/results?search_query=crochet+${encodeURIComponent(query)}`, '_blank');
-    }
   }
 
   // Initial Startup
