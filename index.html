@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zanieke's Pink & Sunflower Crochet Studio 🌻💖</title>
+  <style>
+    :root {
+      --primary-pink: #ff6b8b;
+      --soft-pink: #ffb3c6;
+      --bg-pink: #ffe6eb;
+      --sunflower-yellow: #ffc107;
+      --accent-yellow: #fef08a;
+      --card-bg: #ffffff;
+      --text: #4a2c33;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-pink);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Background Animations (Sunflowers & Hearts) */
+    .bg-floating-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .float-item {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.8rem;
+      opacity: 0.7;
+      animation: floatUp 10s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-115vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Staggered positioning for floating items */
+    .float-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s; }
+    .float-item:nth-child(2)  { left: 18%; animation-duration: 12s; animation-delay: 2s; }
+    .float-item:nth-child(3)  { left: 32%; animation-duration: 8s;  animation-delay: 4s; }
+    .float-item:nth-child(4)  { left: 48%; animation-duration: 11s; animation-delay: 1s; }
+    .float-item:nth-child(5)  { left: 62%; animation-duration: 10s; animation-delay: 5s; }
+    .float-item:nth-child(6)  { left: 75%; animation-duration: 13s; animation-delay: 3s; }
+    .float-item:nth-child(7)  { left: 88%; animation-duration: 9s;  animation-delay: 6s; }
+    .float-item:nth-child(8)  { left: 25%; animation-duration: 14s; animation-delay: 7s; }
+    .float-item:nth-child(9)  { left: 55%; animation-duration: 10s; animation-delay: 2.5s; }
+    .float-item:nth-child(10) { left: 82%; animation-duration: 11s; animation-delay: 0.5s; }
+
+    /* Mobile Container App Layout */
+    .app-viewport {
+      width: 100%;
+      max-width: 480px;
+      background: #fffdf9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 25px rgba(255, 107, 139, 0.2);
+      padding-bottom: 100px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffb3c6 0%, #fef08a 100%);
+      padding: 18px 16px;
+      text-align: center;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(255, 107, 139, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 3px solid var(--sunflower-yellow);
+    }
+
+    header h1 {
+      color: #d81b60;
+      font-size: 1.45rem;
+      font-weight: 800;
+      text-shadow: 1px 1px 0px #fff;
+    }
+
+    header p {
+      font-size: 0.82rem;
+      color: #6a1b29;
+      font-weight: 600;
+    }
+
+    /* FIXED BOTTOM BAR STYLING */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+      border-top: 3.5px solid var(--primary-pink);
+      box-shadow: 0 -8px 25px rgba(255, 107, 139, 0.3);
+      z-index: 999999;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: #7a4652;
+      cursor: pointer;
+      font-weight: 700;
+      width: 23%;
+      padding: 6px 4px;
+      border-radius: 12px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .nav-btn .icon {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+      transition: transform 0.2s ease;
+    }
+
+    /* Active Tab Highlight Styling */
+    .nav-btn.active {
+      color: #d81b60;
+      background: #ffe6ec;
+      border: 1.5px solid var(--primary-pink);
+      box-shadow: 0 3px 8px rgba(255, 107, 139, 0.25);
+    }
+
+    .nav-btn.active .icon {
+      transform: scale(1.15);
+    }
+
+    /* Content Area */
+    .content-area {
+      padding: 14px;
+      flex: 1;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px rgba(255, 179, 198, 0.2);
+      border: 2px solid var(--soft-pink);
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      color: #d81b60;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    input, select, textarea, button.action-btn {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--soft-pink);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      background: #fffdfa;
+      color: var(--text);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-pink);
+    }
+
+    button.action-btn {
+      background: linear-gradient(135deg, var(--primary-pink), var(--sunflower-yellow));
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 4px;
+      box-shadow: 0 3px 8px rgba(255, 107, 139, 0.3);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    /* Card Action Controls (Edit & Delete Buttons) */
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn-small {
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: var(--sunflower-yellow);
+      color: #4a2c33;
+    }
+
+    .btn-delete {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    /* Remember Counter Styling */
+    .remember-item {
+      background: #fffdf0;
+      border-left: 5px solid var(--sunflower-yellow);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #fffae6;
+      border-bottom: 1px solid #fffae6;
+      border-right: 1px solid #fffae6;
+    }
+
+    .counter-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary-pink);
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* Technique Card Styling */
+    .technique-card {
+      background: white;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border: 2px solid var(--soft-pink);
+    }
+
+    .badge {
+      background: var(--accent-yellow);
+      color: #854d0e;
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 6px;
+    }
+
+    /* Custom Animated SVG Diagrams */
+    .diagram-box {
+      width: 100%;
+      height: 110px;
+      background: #fff5f7;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+      border: 2px dashed var(--soft-pink);
+      overflow: hidden;
+    }
+
+    /* Diagram Animations */
+    @keyframes magic-ring-anim {
+      0% { transform: scale(0.6); opacity: 0.4; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.6); opacity: 0.4; }
+    }
+    .anim-magic-ring { animation: magic-ring-anim 2.5s infinite ease-in-out; }
+
+    @keyframes wave-stitch-anim {
+      0% { stroke-dashoffset: 120; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .anim-wave {
+      stroke-dasharray: 120;
+      animation: wave-stitch-anim 3s infinite linear;
+    }
+
+    @keyframes loop-chain-anim {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+    .anim-chain { animation: loop-chain-anim 1.8s infinite ease-in-out; }
+
+    /* Video Embed Container */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid var(--soft-pink);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-floating-container">
+  <div class="float-item">🌻</div>
+  <div class="float-item">💖</div>
+  <div class="float-item">🌻</div>
+  <div class="float-item">💕</div>
+  <div class="float-item">💛</div>
+  <div class="float-item">🌻</div>
+  <div class="float-item">💗</div>
+  <div class="float-item">🌻</div>
+  <div class="float-item">💖</div>
+  <div class="float-item">🌻</div>
+</div>
+
+<div class="app-viewport">
+  <header>
+    <h1>Zanieke's Crochet Studio 🌻💖</h1>
+    <p>Stitches, Row Counters & Journal</p>
+  </header>
+
+  <div class="content-area">
+
+    <div id="remember" class="tab-content active">
+      <div class="card">
+        <h2>💡 Row & Stitch Rememberer</h2>
+        <form id="remember-form">
+          <input type="text" id="rem-title" placeholder="Thing to remember (e.g. Row 4 SC)" required>
+          <input type="number" id="rem-target" placeholder="Times needed (e.g. 24)" min="1" required>
+          <button type="submit" class="action-btn">+ Add Counter</button>
+        </form>
+      </div>
+
+      <div id="remember-list"></div>
+    </div>
+
+    <div id="techniques" class="tab-content">
+      <div class="card">
+        <h2>🧶 Techniques & Stitches</h2>
+        <input type="text" id="tech-search" placeholder="🔍 Search techniques..." oninput="renderTechniques()">
+        
+        <form id="custom-tech-form" style="margin-top:10px;">
+          <input type="text" id="t-title" placeholder="Technique / Stitch Name" required>
+          <select id="t-diff">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <input type="text" id="t-abbrev" placeholder="Abbreviation (e.g. MC, SC, DC)">
+          <textarea id="t-desc" placeholder="Short technique explanation..."></textarea>
+          <button type="submit" class="action-btn">+ Add Custom Technique</button>
+        </form>
+      </div>
+
+      <div id="technique-list"></div>
+    </div>
+
+    <div id="journal" class="tab-content">
+      <div class="card">
+        <h2>📖 Project Journal</h2>
+        <form id="journal-form">
+          <input type="text" id="j-title" placeholder="Project Name" required>
+          <input type="text" id="j-color" placeholder="Yarn & Colors Used">
+          <input type="text" id="j-time" placeholder="Time Spent (e.g. 3 hours)">
+          <input type="file" id="j-photo" accept="image/*">
+          <textarea id="j-notes" placeholder="Notes & progress details..."></textarea>
+          <button type="submit" class="action-btn">Log Project</button>
+        </form>
+      </div>
+      <div id="journal-list"></div>
+    </div>
+
+    <div id="tutorials" class="tab-content">
+      <div class="card">
+        <h2>📹 Search Any Tutorial</h2>
+        <input type="text" id="yt-search-input" placeholder="Search stitch or technique...">
+        <button onclick="searchYouTube()" class="action-btn">Search YouTube</button>
+        
+        <div class="video-container" style="margin-top: 15px;">
+          <iframe id="yt-hub-frame" src="https://www.youtube.com/embed?listType=search&list=crochet+for+beginners+techniques" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="navTab('remember', this)">
+      <span class="icon">💡</span>Remember
+    </button>
+    <button class="nav-btn" onclick="navTab('techniques', this)">
+      <span class="icon">🧶</span>Techniques
+    </button>
+    <button class="nav-btn" onclick="navTab('journal', this)">
+      <span class="icon">📖</span>Journal
+    </button>
+    <button class="nav-btn" onclick="navTab('tutorials', this)">
+      <span class="icon">📹</span>Tutorials
+    </button>
+  </nav>
+</div>
+
+<script>
+  function navTab(tabId, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  let remembers = JSON.parse(localStorage.getItem('z_remembers')) || [];
+
+  document.getElementById('remember-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('rem-title').value;
+    const target = parseInt(document.getElementById('rem-target').value);
+    remembers.push({ id: Date.now(), title, target, count: 0 });
+    saveAndRenderRemembers();
+    e.target.reset();
+  });
+
+  function updateRemCount(id, delta) {
+    const item = remembers.find(r => r.id === id);
+    if (item) {
+      item.count = Math.max(0, item.count + delta);
+      saveAndRenderRemembers();
+    }
+  }
+
+  function deleteRem(id) {
+    if (confirm("Are you sure you want to delete this item?")) {
+      remembers = remembers.filter(r => r.id !== id);
+      saveAndRenderRemembers();
+    }
+  }
+
+  function saveAndRenderRemembers() {
+    localStorage.setItem('z_remembers', JSON.stringify(remembers));
+    const container = document.getElementById('remember-list');
+    container.innerHTML = remembers.length ? '' : '<p style="text-align:center; color:#88505b;">No counters added yet 🌻</p>';
+
+    remembers.forEach(item => {
+      const done = item.count >= item.target;
+      container.innerHTML += `
+        <div class="remember-item">
+          <div>
+            <strong style="font-size:0.95rem;">${item.title}</strong>
+            ${done ? ' <span style="color:#d81b60;">🎉 Done!</span>' : ''}
+            <div style="font-size:0.75rem; color:#88505b;">Target: ${item.target} times</div>
+          </div>
+          <div class="counter-btns">
+            <button class="btn-circle" onclick="updateRemCount(${item.id}, -1)">-</button>
+            <span style="font-weight:bold; min-width: 40px; text-align:center;">${item.count}/${item.target}</span>
+            <button class="btn-circle" onclick="updateRemCount(${item.id}, 1)">+</button>
+            <button class="btn-small btn-delete" onclick="deleteRem(${item.id})">✕</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  const defaultTechniques = [
+    {
+      id: 1,
+      title: "Magic Circle (Magic Ring)",
+      abbrev: "MC / MR",
+      diff: "Beginner",
+      diagramType: "ring",
+      desc: "An adjustable starting loop used for working in the round."
+    },
+    {
+      id: 2,
+      title: "Chain Stitch",
+      abbrev: "CH",
+      diff: "Beginner",
+      diagramType: "chain",
+      desc: "The foundation stitch for almost all crochet projects."
+    },
+    {
+      id: 3,
+      title: "Single Crochet",
+      abbrev: "SC",
+      diff: "Beginner",
+      diagramType: "wave",
+      desc: "A basic, tight stitch that creates a solid fabric."
+    },
+    {
+      id: 4,
+      title: "Double Crochet",
+      abbrev: "DC",
+      diff: "Beginner",
+      diagramType: "tall_wave",
+      desc: "A tall stitch used for blankets, scarves, and granny squares."
+    }
+  ];
+
+  let techniques = JSON.parse(localStorage.getItem('z_techniques')) || defaultTechniques;
+
+  document.getElementById('custom-tech-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('t-title').value;
+    techniques.unshift({
+      id: Date.now(),
+      title: title,
+      abbrev: document.getElementById('t-abbrev').value || 'ST',
+      diff: document.getElementById('t-diff').value,
+      diagramType: 'wave',
+      desc: document.getElementById('t-desc').value || 'Custom added technique.'
+    });
+    localStorage.setItem('z_techniques', JSON.stringify(techniques));
+    renderTechniques();
+    e.target.reset();
+  });
+
+  function editTechnique(id) {
+    const tech = techniques.find(t => t.id === id);
+    if (!tech) return;
+
+    const newTitle = prompt("Edit Technique Name:", tech.title);
+    if (newTitle === null) return;
+    
+    const newAbbrev = prompt("Edit Abbreviation:", tech.abbrev);
+    if (newAbbrev === null) return;
+
+    const newDesc = prompt("Edit Description:", tech.desc);
+    if (newDesc === null) return;
+
+    if (confirm("Are you sure you want to save these edits to this technique?")) {
+      tech.title = newTitle.trim() || tech.title;
+      tech.abbrev = newAbbrev.trim() || tech.abbrev;
+      tech.desc = newDesc.trim() || tech.desc;
+      localStorage.setItem('z_techniques', JSON.stringify(techniques));
+      renderTechniques();
+    }
+  }
+
+  function deleteTechnique(id) {
+    if (confirm("Are you sure you want to delete this technique?")) {
+      techniques = techniques.filter(t => t.id !== id);
+      localStorage.setItem('z_techniques', JSON.stringify(techniques));
+      renderTechniques();
+    }
+  }
+
+  function getTechniqueSVG(type) {
+    if (type === 'ring') {
+      return `
+        <svg class="anim-magic-ring" width="80" height="80" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#ff6b8b" stroke-width="7" stroke-dasharray="10 5" />
+          <circle cx="50" cy="50" r="22" fill="none" stroke="#ffc107" stroke-width="6" />
+          <circle cx="50" cy="50" r="8" fill="#ff6b8b" />
+        </svg>`;
+    } else if (type === 'chain') {
+      return `
+        <svg class="anim-chain" width="120" height="60" viewBox="0 0 120 60">
+          <ellipse cx="25" cy="30" rx="14" ry="20" fill="none" stroke="#ff6b8b" stroke-width="6" />
+          <ellipse cx="55" cy="30" rx="14" ry="20" fill="none" stroke="#ffc107" stroke-width="6" />
+          <ellipse cx="85" cy="30" rx="14" ry="20" fill="none" stroke="#ff6b8b" stroke-width="6" />
+        </svg>`;
+    } else if (type === 'tall_wave') {
+      return `
+        <svg width="120" height="70" viewBox="0 0 120 70">
+          <path class="anim-wave" d="M10,50 Q30,10 50,50 T90,50 T130,50" fill="none" stroke="#ff6b8b" stroke-width="6" stroke-linecap="round" />
+          <path class="anim-wave" d="M10,60 Q30,20 50,60 T90,60 T130,60" fill="none" stroke="#ffc107" stroke-width="5" stroke-linecap="round" />
+        </svg>`;
+    } else {
+      return `
+        <svg width="120" height="60" viewBox="0 0 120 60">
+          <path class="anim-wave" d="M10,30 Q30,10 50,30 T90,30 T130,30" fill="none" stroke="#ff6b8b" stroke-width="6" stroke-linecap="round" />
+        </svg>`;
+    }
+  }
+
+  function renderTechniques() {
+    const query = document.getElementById('tech-search').value.toLowerCase();
+    const container = document.getElementById('technique-list');
+    container.innerHTML = '';
+
+    const filtered = techniques.filter(t => 
+      t.title.toLowerCase().includes(query) ||
+      t.abbrev.toLowerCase().includes(query) ||
+      t.diff.toLowerCase().includes(query)
+    );
+
+    filtered.forEach(t => {
+      const searchKey = encodeURIComponent("how to crochet " + t.title);
+      container.innerHTML += `
+        <div class="technique-card">
+          <div class="card-actions">
+            <button class="btn-small btn-edit" onclick="editTechnique(${t.id})">✏️ Edit</button>
+            <button class="btn-small btn-delete" onclick="deleteTechnique(${t.id})">🗑️ Delete</button>
+          </div>
+          <h3 style="font-size:1.1rem; color:#d81b60;">${t.title}</h3>
+          
+          <div style="margin:6px 0;">
+            <span class="badge">${t.abbrev}</span>
+            <span class="badge" style="background:#ffe6eb; color:#d81b60;">${t.diff}</span>
+          </div>
+
+          <p style="font-size:0.82rem; color:#555; margin-bottom:8px;">${t.desc}</p>
+
+          <div class="diagram-box">
+            ${getTechniqueSVG(t.diagramType)}
+          </div>
+
+          <p style="font-size:0.75rem; color:#88505b; margin-top:8px;"><strong>📺 Video Tutorial:</strong></p>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed?listType=search&list=${searchKey}" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  let projects = JSON.parse(localStorage.getItem('z_projects')) || [];
+
+  document.getElementById('journal-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const photo = document.getElementById('j-photo').files[0];
+    const save = (imgData) => {
+      projects.unshift({
+        id: Date.now(),
+        title: document.getElementById('j-title').value,
+        color: document.getElementById('j-color').value,
+        time: document.getElementById('j-time').value,
+        notes: document.getElementById('j-notes').value,
+        photo: imgData || ''
+      });
+      localStorage.setItem('z_projects', JSON.stringify(projects));
+      renderJournal();
+      e.target.reset();
+    };
+
+    if (photo) {
+      const reader = new FileReader();
+      reader.onload = (evt) => save(evt.target.result);
+      reader.readAsDataURL(photo);
+    } else {
+      save('');
+    }
+  });
+
+  function editJournal(id) {
+    const proj = projects.find(p => p.id === id);
+    if (!proj) return;
+
+    const newTitle = prompt("Edit Project Name:", proj.title);
+    if (newTitle === null) return;
+
+    const newColor = prompt("Edit Yarn & Colors:", proj.color);
+    if (newColor === null) return;
+
+    const newTime = prompt("Edit Time Spent:", proj.time);
+    if (newTime === null) return;
+
+    const newNotes = prompt("Edit Notes:", proj.notes);
+    if (newNotes === null) return;
+
+    if (confirm("Are you sure you want to save changes to this journal entry?")) {
+      proj.title = newTitle.trim() || proj.title;
+      proj.color = newColor.trim() || proj.color;
+      proj.time = newTime.trim() || proj.time;
+      proj.notes = newNotes.trim() || proj.notes;
+      localStorage.setItem('z_projects', JSON.stringify(projects));
+      renderJournal();
+    }
+  }
+
+  function deleteJournal(id) {
+    if (confirm("Are you sure you want to delete this project entry?")) {
+      projects = projects.filter(p => p.id !== id);
+      localStorage.setItem('z_projects', JSON.stringify(projects));
+      renderJournal();
+    }
+  }
+
+  function renderJournal() {
+    const list = document.getElementById('journal-list');
+    list.innerHTML = projects.length ? '' : '<p style="text-align:center; color:#88505b;">No projects logged yet 🌻</p>';
+    projects.forEach(p => {
+      list.innerHTML += `
+        <div class="card">
+          <div class="card-actions">
+            <button class="btn-small btn-edit" onclick="editJournal(${p.id})">✏️ Edit</button>
+            <button class="btn-small btn-delete" onclick="deleteJournal(${p.id})">🗑️ Delete</button>
+          </div>
+          ${p.photo ? `<img src="${p.photo}" style="width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:8px;">` : ''}
+          <h3 style="font-size:1.05rem; color:#d81b60;">${p.title}</h3>
+          <p style="font-size:0.82rem; margin:4px 0;"><strong>Yarn / Colors:</strong> ${p.color || 'N/A'}</p>
+          <p style="font-size:0.82rem; margin:4px 0;"><strong>Time Spent:</strong> ${p.time || 'N/A'}</p>
+          <p style="font-size:0.82rem; color:#666; font-style:italic; margin-top:6px;">"${p.notes}"</p>
+        </div>
+      `;
+    });
+  }
+
+  function searchYouTube() {
+    const query = document.getElementById('yt-search-input').value.trim();
+    if (query) {
+      document.getElementById('yt-hub-frame').src = `https://www.youtube.com/embed?listType=search&list=crochet+${encodeURIComponent(query)}`;
+    }
+  }
+
+  saveAndRenderRemembers();
+  renderTechniques();
+  renderJournal();
+</script>
+
+</body>
+</html>
