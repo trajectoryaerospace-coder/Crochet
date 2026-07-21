@@ -76,7 +76,7 @@
     .float-item:nth-child(9)  { left: 55%; animation-duration: 10s; animation-delay: 2.5s; }
     .float-item:nth-child(10) { left: 82%; animation-duration: 11s; animation-delay: 0.5s; }
 
-    /* App Viewport */
+    /* App Viewport Container */
     .app-viewport {
       width: 100%;
       max-width: 480px;
@@ -116,7 +116,7 @@
       font-weight: 600;
     }
 
-    /* BOTTOM NAV - 3 TABS */
+    /* LOCKED BOTTOM NAVIGATION BAR */
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
@@ -142,12 +142,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: #7a4652;
       cursor: pointer;
       font-weight: 700;
-      width: 31%;
-      padding: 8px 4px;
+      width: 23%;
+      padding: 6px 4px;
       border-radius: 12px;
       transition: all 0.2s ease-in-out;
     }
@@ -358,6 +358,20 @@
       top: 0; left: 0;
       width: 100%; height: 100%;
     }
+
+    .tutorial-preset-btn {
+      background: #fff0f3;
+      border: 1px solid var(--soft-pink);
+      color: #d81b60;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 6px;
+      text-align: left;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -409,7 +423,7 @@
             <option value="Advanced">Advanced</option>
           </select>
           <input type="text" id="t-abbrev" placeholder="Abbreviation (e.g. MC, SC, DC)">
-          <input type="text" id="t-videoUrl" placeholder="YouTube Video Link or Video ID">
+          <input type="text" id="t-videoUrl" placeholder="YouTube Link or Video ID">
           <textarea id="t-desc" placeholder="Short technique explanation..."></textarea>
           <button type="submit" class="action-btn">+ Add Technique</button>
         </form>
@@ -433,6 +447,29 @@
       <div id="journal-list"></div>
     </div>
 
+    <div id="tutorials" class="tab-content">
+      <div class="card">
+        <h2>📹 Crochet Tutorial Studio</h2>
+        <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">Select a popular tutorial or load any YouTube video link below:</p>
+
+        <button class="tutorial-preset-btn" onclick="playTutorial('wgVOkQcf5qw', 'Single Crochet Basics')">▶️ Single Crochet Lesson</button>
+        <button class="tutorial-preset-btn" onclick="playTutorial('5xKssKskNzo', 'Double Crochet Lesson')">▶️ Double Crochet Lesson</button>
+        <button class="tutorial-preset-btn" onclick="playTutorial('p298HxgsO1s', 'Magic Circle / Ring Tutorial')">▶️ Magic Circle Tutorial</button>
+        <button class="tutorial-preset-btn" onclick="playTutorial('o-Il8OcNAZA', 'Easy Chain Stitch')">▶️ Chain Stitch Tutorial</button>
+
+        <hr style="border:0; border-top:1px solid var(--soft-pink); margin:12px 0;">
+
+        <input type="text" id="yt-search-input" placeholder="Paste YouTube link or enter Video ID">
+        <button onclick="loadCustomTutorial()" class="action-btn">Load Video</button>
+        <button onclick="searchYouTubeExternal()" class="action-btn" style="background:var(--sunflower-yellow); color:#4a2c33;">🔍 Search YouTube Online</button>
+
+        <h3 id="tutorial-now-playing" style="font-size:0.95rem; color:#d81b60; margin-top:12px;">Now Playing: Single Crochet Basics</h3>
+        <div class="video-container">
+          <iframe id="tutorial-player" src="https://www.youtube.com/embed/wgVOkQcf5qw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <nav class="bottom-nav">
@@ -445,11 +482,14 @@
     <button class="nav-btn" onclick="navTab('journal', this)">
       <span class="icon">📖</span>Journal
     </button>
+    <button class="nav-btn" onclick="navTab('tutorials', this)">
+      <span class="icon">📹</span>Tutorials
+    </button>
   </nav>
 </div>
 
 <script>
-  // Mobile Navigation Control
+  // Navigation Control
   function navTab(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -458,7 +498,7 @@
     window.scrollTo(0,0);
   }
 
-  // --- Helper to Extract YouTube Video ID from Link or ID string ---
+  // YouTube Video ID Extractor
   function extractYouTubeId(input) {
     if (!input) return 'wgVOkQcf5qw';
     input = input.trim();
@@ -467,7 +507,7 @@
     return (match && match[2].length === 11) ? match[2] : input;
   }
 
-  // --- 1. REMEMBER THINGY LOGIC ---
+  // --- 1. REMEMBER COUNTER LOGIC ---
   let remembers = JSON.parse(localStorage.getItem('z_remembers')) || [];
 
   document.getElementById('remember-form').addEventListener('submit', (e) => {
@@ -519,7 +559,7 @@
     });
   }
 
-  // --- 2. CROCHET TECHNIQUES WITH WORKING VIDEO LINKS ---
+  // --- 2. CROCHET TECHNIQUES LOGIC ---
   const defaultTechniques = [
     {
       id: 1,
@@ -766,6 +806,28 @@
         </div>
       `;
     });
+  }
+
+  // --- 4. TUTORIAL TAB LOGIC ---
+  function playTutorial(videoId, title) {
+    document.getElementById('tutorial-player').src = `https://www.youtube.com/embed/${videoId}`;
+    document.getElementById('tutorial-now-playing').innerText = `Now Playing: ${title}`;
+  }
+
+  function loadCustomTutorial() {
+    const input = document.getElementById('yt-search-input').value;
+    if (!input.trim()) return;
+    const vidId = extractYouTubeId(input);
+    playTutorial(vidId, 'Custom Loaded Tutorial');
+  }
+
+  function searchYouTubeExternal() {
+    const query = document.getElementById('yt-search-input').value.trim();
+    if (query) {
+      window.open(`https://www.youtube.com/results?search_query=crochet+${encodeURIComponent(query)}`, '_blank');
+    } else {
+      window.open('https://www.youtube.com/results?search_query=crochet+tutorials', '_blank');
+    }
   }
 
   // Initial Startup
