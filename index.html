@@ -55,14 +55,8 @@
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-115vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
     }
 
     .float-item:nth-child(1)  { left: 5%;  animation-duration: 9s;  animation-delay: 0s; }
@@ -116,7 +110,7 @@
       font-weight: 600;
     }
 
-    /* BOTTOM NAV - 4 TABS */
+    /* BOTTOM NAV */
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
@@ -319,29 +313,6 @@
       overflow: hidden;
     }
 
-    @keyframes magic-ring-anim {
-      0% { transform: scale(0.6); opacity: 0.4; }
-      50% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(0.6); opacity: 0.4; }
-    }
-    .anim-magic-ring { animation: magic-ring-anim 2.5s infinite ease-in-out; }
-
-    @keyframes wave-stitch-anim {
-      0% { stroke-dashoffset: 120; }
-      100% { stroke-dashoffset: 0; }
-    }
-    .anim-wave {
-      stroke-dasharray: 120;
-      animation: wave-stitch-anim 3s infinite linear;
-    }
-
-    @keyframes loop-chain-anim {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0); }
-    }
-    .anim-chain { animation: loop-chain-anim 1.8s infinite ease-in-out; }
-
     .video-container {
       position: relative;
       padding-bottom: 56.25%;
@@ -359,12 +330,60 @@
       width: 100%; height: 100%;
     }
 
-    /* CHECKLIST STYLES */
+    /* PROJECT & CHECKLIST STYLES */
+    .project-card {
+      background: white;
+      border: 2px solid var(--soft-pink);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(255, 179, 198, 0.2);
+    }
+
+    .project-header {
+      background: linear-gradient(135deg, #fffdfa 0%, #ffe6eb 100%);
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .project-header h3 {
+      font-size: 1.05rem;
+      color: #d81b60;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project-header .expand-icon {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+      color: var(--primary-pink);
+    }
+
+    .project-card.open .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .project-body {
+      display: none;
+      padding: 14px;
+      border-top: 1.5px solid var(--soft-pink);
+      background: #fffdf9;
+    }
+
+    .project-card.open .project-body {
+      display: block;
+    }
+
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
+      gap: 10px;
+      padding: 10px;
       background: #ffffff;
       border: 1.5px solid var(--soft-pink);
       border-radius: 12px;
@@ -433,7 +452,7 @@
       background: #ffe6eb;
       border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 12px;
+      margin: 8px 0 12px;
       border: 1px solid var(--soft-pink);
     }
 
@@ -442,6 +461,20 @@
       background: linear-gradient(90deg, var(--primary-pink), var(--sunflower-yellow));
       width: 0%;
       transition: width 0.3s ease;
+    }
+
+    .custom-step-box {
+      background: #fff0f3;
+      border: 1.5px dashed var(--primary-pink);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+    }
+
+    .custom-step-box h4 {
+      font-size: 0.85rem;
+      color: #d81b60;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -463,7 +496,7 @@
 <div class="app-viewport">
   <header>
     <h1>Zanieke's Crochet Studio 🌻💖</h1>
-    <p>Stitches, Row Counters & Patterns</p>
+    <p>Live Sync Stitches, Counters & Projects</p>
   </header>
 
   <div class="content-area">
@@ -477,7 +510,6 @@
           <button type="submit" class="action-btn">+ Add Counter</button>
         </form>
       </div>
-
       <div id="remember-list"></div>
     </div>
 
@@ -499,7 +531,6 @@
           <button type="submit" class="action-btn">+ Add Technique</button>
         </form>
       </div>
-
       <div id="technique-list"></div>
     </div>
 
@@ -520,27 +551,15 @@
 
     <div id="pattern" class="tab-content">
       <div class="card">
-        <h2>📋 Body Pattern Checklist</h2>
-        <p style="font-size:0.82rem; color:#6a1b29; margin-bottom:10px;">
-          <strong>Colour:</strong> green/pink/Purple/Light blue yarn
-        </p>
-
-        <div class="progress-bar-container">
-          <div id="pattern-progress" class="progress-bar-fill"></div>
-        </div>
-        <div id="progress-text" style="font-size:0.75rem; color:#88505b; text-align:right; font-weight:bold; margin-bottom:12px;">0% Complete</div>
-
-        <div style="display:flex; gap:8px; margin-bottom:12px;">
-          <button class="btn-small btn-edit" style="flex:1; padding:8px;" onclick="resetChecklist()">🔄 Reset Progress</button>
-        </div>
-
-        <form id="custom-pattern-form" style="margin-bottom:14px;">
-          <input type="text" id="p-step" placeholder="+ Add extra row/note to pattern..." required>
-          <button type="submit" class="action-btn" style="padding:8px; font-size:0.8rem;">+ Add Custom Step</button>
+        <h2>📋 Project Checklists</h2>
+        <form id="new-project-form">
+          <input type="text" id="np-name" placeholder="New Project Name (e.g. Penguin Kit)" required>
+          <input type="text" id="np-yarn" placeholder="Yarn colors / notes...">
+          <button type="submit" class="action-btn">+ Create New Project</button>
         </form>
       </div>
 
-      <div id="checklist-container"></div>
+      <div id="projects-container"></div>
     </div>
 
   </div>
@@ -561,58 +580,135 @@
   </nav>
 </div>
 
-<script>
-  // Mobile Navigation Control
-  function navTab(tabId, btn) {
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyApxQJFS8Ph-rl6NcTDU3_FiyQ5He_UM6Y",
+    authDomain: "the-blob-articles.firebaseapp.com",
+    databaseURL: "https://the-blob-articles-default-rtdb.firebaseio.com",
+    projectId: "the-blob-articles",
+    storageBucket: "the-blob-articles.firebasestorage.app",
+    messagingSenderId: "546322985129",
+    appId: "1:546322985129:web:4872de12fd455fb193b9b8",
+    measurementId: "G-Y19BBJXSYG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Default Penguin Kit Initial Data
+  const defaultPenguinSteps = [
+    { id: 1, rnd: "Rnd 1", text: "Working in to magic ring: 1ch, 6sc, ss=6sts", note: "Place stitch marker in first stitch, moving it up with each rnd.", done: false },
+    { id: 2, rnd: "Rnd 2", text: "1ch, 6inc, ss=12sts", done: false },
+    { id: 3, rnd: "Rnd 3", text: "1ch, (sc, inc)*6 times, ss=18sts", done: false },
+    { id: 4, rnd: "Rnd 4", text: "1ch, (sc, inc, sc)*6 times, ss=24sts", done: false },
+    { id: 5, rnd: "Rnd 5", text: "1ch, (3sc, inc)*6 times, ss=30sts", done: false },
+    { id: 6, rnd: "Rnd 6", text: "1ch, (2sc, inc, 2sc)*6 times, ss=36sts", done: false },
+    { id: 7, rnd: "Rnd 7", text: "1ch, 36sc, ss=36sts", done: false },
+    { id: 8, rnd: "Rnd 8", text: "1ch, 13sc, (3sc White yarn), 4sc, (3sc White yarn), 13sc, ss=36sts", done: false },
+    { id: 9, rnd: "Rnd 9-10", text: "1ch, 12sc, (5sc White yarn), 2sc, (5sc White yarn), 12sc, ss=36sts", done: false },
+    { id: 10, rnd: "Rnd 11-14", text: "1ch, 11sc, (14sc White yarn), 11sc, ss=36sts", done: false },
+    { id: 11, rnd: "Rnd 15", text: "1ch, 12sc, (12sc White yarn), 12sc, ss=36sts", done: false },
+    { id: 12, rnd: "Rnd 16", text: "1ch, 14sc, (8sc White yarn), 14sc, ss=36sts", done: false },
+    { id: 13, rnd: "Rnd 17", text: "1ch, (2sc, dec, 2sc)*6 times, ss=30sts", done: false },
+    { id: 14, rnd: "Rnd 18", text: "1ch, (3sc, dec)*6 times, ss=24sts", done: false },
+    { id: 15, rnd: "Rnd 19", text: "1ch, (sc, dec, sc)*6 times, ss=18sts", note: "Put in fiber fill, about 4g-6g", done: false },
+    { id: 16, rnd: "Rnd 20", text: "1ch, (sc dec)*6 times, ss =12sts", done: false },
+    { id: 17, rnd: "Rnd 21", text: "Pick up 12 FLO and tighten the opening cut tail", note: "Hiding the tail yarn inside the body", done: false }
+  ];
+
+  const defaultTechniques = [
+    { id: 1, title: "Magic Circle (Magic Ring)", abbrev: "MC / MR", diff: "Beginner", diagramType: "ring", videoId: "p298HxgsO1s", desc: "An adjustable starting loop used for working in the round." },
+    { id: 2, title: "Chain Stitch", abbrev: "CH", diff: "Beginner", diagramType: "chain", videoId: "o-Il8OcNAZA", desc: "The foundation stitch for almost all crochet projects." },
+    { id: 3, title: "Single Crochet", abbrev: "SC", diff: "Beginner", diagramType: "wave", videoId: "wgVOkQcf5qw", desc: "A basic, tight stitch that creates a solid fabric." },
+    { id: 4, title: "Double Crochet", abbrev: "DC", diff: "Beginner", diagramType: "tall_wave", videoId: "5xKssKskNzo", desc: "A tall stitch used for blankets, scarves, and granny squares." }
+  ];
+
+  // Global State stored in memory, auto-synced with Realtime Database
+  window.appData = {
+    remembers: [],
+    techniques: defaultTechniques,
+    projects: [],
+    checklistProjects: [{
+      id: "penguin_kit_default",
+      name: "Penguin Kit",
+      yarn: "green/pink/Purple/Light blue yarn",
+      steps: defaultPenguinSteps,
+      isOpen: true
+    }]
+  };
+
+  // Sync Data to Firebase
+  window.syncToFirebase = function() {
+    set(ref(db, 'crochetStudio'), window.appData);
+  };
+
+  // Listen for Realtime Database Changes from Anyone
+  onValue(ref(db, 'crochetStudio'), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      if (data.remembers) window.appData.remembers = data.remembers;
+      if (data.techniques) window.appData.techniques = data.techniques;
+      if (data.projects) window.appData.projects = data.projects;
+      if (data.checklistProjects) window.appData.checklistProjects = data.checklistProjects;
+    } else {
+      // First initialization in Database
+      window.syncToFirebase();
+    }
+    renderAll();
+  });
+
+  // UI Render functions bound globally
+  window.renderAll = function() {
+    renderRemembers();
+    renderTechniques();
+    renderJournal();
+    renderChecklistProjects();
+  };
+
+  // Navigation Functionality
+  window.navTab = function(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
     window.scrollTo(0,0);
-  }
+  };
 
-  // --- Helper to Extract YouTube Video ID from Link or ID string ---
-  function extractYouTubeId(input) {
-    if (!input) return 'wgVOkQcf5qw';
-    input = input.trim();
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = input.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : input;
-  }
-
-  // --- 1. REMEMBER THINGY LOGIC ---
-  let remembers = JSON.parse(localStorage.getItem('z_remembers')) || [];
-
+  // --- 1. REMEMBER LOGIC ---
   document.getElementById('remember-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const title = document.getElementById('rem-title').value;
     const target = parseInt(document.getElementById('rem-target').value);
-    remembers.push({ id: Date.now(), title, target, count: 0 });
-    saveAndRenderRemembers();
+    if (!window.appData.remembers) window.appData.remembers = [];
+    window.appData.remembers.push({ id: Date.now(), title, target, count: 0 });
+    window.syncToFirebase();
     e.target.reset();
   });
 
-  function updateRemCount(id, delta) {
-    const item = remembers.find(r => r.id === id);
+  window.updateRemCount = function(id, delta) {
+    const item = window.appData.remembers.find(r => r.id === id);
     if (item) {
       item.count = Math.max(0, item.count + delta);
-      saveAndRenderRemembers();
+      window.syncToFirebase();
     }
-  }
+  };
 
-  function deleteRem(id) {
-    if (confirm("Are you sure you want to delete this item?")) {
-      remembers = remembers.filter(r => r.id !== id);
-      saveAndRenderRemembers();
+  window.deleteRem = function(id) {
+    if (confirm("Delete this counter?")) {
+      window.appData.remembers = window.appData.remembers.filter(r => r.id !== id);
+      window.syncToFirebase();
     }
-  }
+  };
 
-  function saveAndRenderRemembers() {
-    localStorage.setItem('z_remembers', JSON.stringify(remembers));
+  function renderRemembers() {
     const container = document.getElementById('remember-list');
-    container.innerHTML = remembers.length ? '' : '<p style="text-align:center; color:#88505b;">No counters added yet 🌻</p>';
+    const items = window.appData.remembers || [];
+    container.innerHTML = items.length ? '' : '<p style="text-align:center; color:#88505b;">No counters added yet 🌻</p>';
 
-    remembers.forEach(item => {
+    items.forEach(item => {
       const done = item.count >= item.target;
       container.innerHTML += `
         <div class="remember-item">
@@ -632,55 +728,22 @@
     });
   }
 
-  // --- 2. CROCHET TECHNIQUES WITH WORKING VIDEO LINKS ---
-  const defaultTechniques = [
-    {
-      id: 1,
-      title: "Magic Circle (Magic Ring)",
-      abbrev: "MC / MR",
-      diff: "Beginner",
-      diagramType: "ring",
-      videoId: "p298HxgsO1s",
-      desc: "An adjustable starting loop used for working in the round."
-    },
-    {
-      id: 2,
-      title: "Chain Stitch",
-      abbrev: "CH",
-      diff: "Beginner",
-      diagramType: "chain",
-      videoId: "o-Il8OcNAZA",
-      desc: "The foundation stitch for almost all crochet projects."
-    },
-    {
-      id: 3,
-      title: "Single Crochet",
-      abbrev: "SC",
-      diff: "Beginner",
-      diagramType: "wave",
-      videoId: "wgVOkQcf5qw",
-      desc: "A basic, tight stitch that creates a solid fabric."
-    },
-    {
-      id: 4,
-      title: "Double Crochet",
-      abbrev: "DC",
-      diff: "Beginner",
-      diagramType: "tall_wave",
-      videoId: "5xKssKskNzo",
-      desc: "A tall stitch used for blankets, scarves, and granny squares."
-    }
-  ];
-
-  let techniques = JSON.parse(localStorage.getItem('z_techniques')) || defaultTechniques;
+  // --- 2. TECHNIQUES LOGIC ---
+  function extractYouTubeId(input) {
+    if (!input) return 'wgVOkQcf5qw';
+    input = input.trim();
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = input.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : input;
+  }
 
   document.getElementById('custom-tech-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const title = document.getElementById('t-title').value;
-    const inputVideo = document.getElementById('t-videoUrl').value;
-    const vidId = extractYouTubeId(inputVideo);
+    const vidId = extractYouTubeId(document.getElementById('t-videoUrl').value);
 
-    techniques.unshift({
+    if (!window.appData.techniques) window.appData.techniques = [];
+    window.appData.techniques.unshift({
       id: Date.now(),
       title: title,
       abbrev: document.getElementById('t-abbrev').value || 'ST',
@@ -689,80 +752,24 @@
       videoId: vidId,
       desc: document.getElementById('t-desc').value || 'Custom technique.'
     });
-    localStorage.setItem('z_techniques', JSON.stringify(techniques));
-    renderTechniques();
+    window.syncToFirebase();
     e.target.reset();
   });
 
-  function editTechnique(id) {
-    const tech = techniques.find(t => t.id === id);
-    if (!tech) return;
-
-    const newTitle = prompt("Edit Technique Name:", tech.title);
-    if (newTitle === null) return;
-    
-    const newAbbrev = prompt("Edit Abbreviation:", tech.abbrev);
-    if (newAbbrev === null) return;
-
-    const newVid = prompt("Edit YouTube Video Link or ID:", tech.videoId);
-    if (newVid === null) return;
-
-    const newDesc = prompt("Edit Description:", tech.desc);
-    if (newDesc === null) return;
-
-    if (confirm("Save changes to this technique?")) {
-      tech.title = newTitle.trim() || tech.title;
-      tech.abbrev = newAbbrev.trim() || tech.abbrev;
-      tech.videoId = extractYouTubeId(newVid);
-      tech.desc = newDesc.trim() || tech.desc;
-      localStorage.setItem('z_techniques', JSON.stringify(techniques));
-      renderTechniques();
+  window.deleteTechnique = function(id) {
+    if (confirm("Delete this technique?")) {
+      window.appData.techniques = window.appData.techniques.filter(t => t.id !== id);
+      window.syncToFirebase();
     }
-  }
-
-  function deleteTechnique(id) {
-    if (confirm("Are you sure you want to delete this technique?")) {
-      techniques = techniques.filter(t => t.id !== id);
-      localStorage.setItem('z_techniques', JSON.stringify(techniques));
-      renderTechniques();
-    }
-  }
-
-  function getTechniqueSVG(type) {
-    if (type === 'ring') {
-      return `
-        <svg class="anim-magic-ring" width="80" height="80" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#ff6b8b" stroke-width="7" stroke-dasharray="10 5" />
-          <circle cx="50" cy="50" r="22" fill="none" stroke="#ffc107" stroke-width="6" />
-          <circle cx="50" cy="50" r="8" fill="#ff6b8b" />
-        </svg>`;
-    } else if (type === 'chain') {
-      return `
-        <svg class="anim-chain" width="120" height="60" viewBox="0 0 120 60">
-          <ellipse cx="25" cy="30" rx="14" ry="20" fill="none" stroke="#ff6b8b" stroke-width="6" />
-          <ellipse cx="55" cy="30" rx="14" ry="20" fill="none" stroke="#ffc107" stroke-width="6" />
-          <ellipse cx="85" cy="30" rx="14" ry="20" fill="none" stroke="#ff6b8b" stroke-width="6" />
-        </svg>`;
-    } else if (type === 'tall_wave') {
-      return `
-        <svg width="120" height="70" viewBox="0 0 120 70">
-          <path class="anim-wave" d="M10,50 Q30,10 50,50 T90,50 T130,50" fill="none" stroke="#ff6b8b" stroke-width="6" stroke-linecap="round" />
-          <path class="anim-wave" d="M10,60 Q30,20 50,60 T90,60 T130,60" fill="none" stroke="#ffc107" stroke-width="5" stroke-linecap="round" />
-        </svg>`;
-    } else {
-      return `
-        <svg width="120" height="60" viewBox="0 0 120 60">
-          <path class="anim-wave" d="M10,30 Q30,10 50,30 T90,30 T130,30" fill="none" stroke="#ff6b8b" stroke-width="6" stroke-linecap="round" />
-        </svg>`;
-    }
-  }
+  };
 
   function renderTechniques() {
-    const query = document.getElementById('tech-search').value.toLowerCase();
+    const query = (document.getElementById('tech-search').value || '').toLowerCase();
     const container = document.getElementById('technique-list');
     container.innerHTML = '';
+    const list = window.appData.techniques || [];
 
-    const filtered = techniques.filter(t => 
+    const filtered = list.filter(t => 
       t.title.toLowerCase().includes(query) ||
       t.abbrev.toLowerCase().includes(query) ||
       t.diff.toLowerCase().includes(query)
@@ -773,7 +780,6 @@
       container.innerHTML += `
         <div class="technique-card">
           <div class="card-actions">
-            <button class="btn-small btn-edit" onclick="editTechnique(${t.id})">✏️ Edit</button>
             <button class="btn-small btn-delete" onclick="deleteTechnique(${t.id})">🗑️ Delete</button>
           </div>
           <h3 style="font-size:1.1rem; color:#d81b60;">${t.title}</h3>
@@ -785,27 +791,22 @@
 
           <p style="font-size:0.82rem; color:#555; margin-bottom:8px;">${t.desc}</p>
 
-          <div class="diagram-box">
-            ${getTechniqueSVG(t.diagramType)}
-          </div>
-
           <p style="font-size:0.75rem; color:#88505b; margin-top:8px;"><strong>📺 Video Tutorial:</strong></p>
           <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe>
           </div>
         </div>
       `;
     });
   }
 
-  // --- 3. PROJECT JOURNAL LOGIC ---
-  let projects = JSON.parse(localStorage.getItem('z_projects')) || [];
-
+  // --- 3. JOURNAL LOGIC ---
   document.getElementById('journal-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const photo = document.getElementById('j-photo').files[0];
     const save = (imgData) => {
-      projects.unshift({
+      if (!window.appData.projects) window.appData.projects = [];
+      window.appData.projects.unshift({
         id: Date.now(),
         title: document.getElementById('j-title').value,
         color: document.getElementById('j-color').value,
@@ -813,8 +814,7 @@
         notes: document.getElementById('j-notes').value,
         photo: imgData || ''
       });
-      localStorage.setItem('z_projects', JSON.stringify(projects));
-      renderJournal();
+      window.syncToFirebase();
       e.target.reset();
     };
 
@@ -827,48 +827,21 @@
     }
   });
 
-  function editJournal(id) {
-    const proj = projects.find(p => p.id === id);
-    if (!proj) return;
-
-    const newTitle = prompt("Edit Project Name:", proj.title);
-    if (newTitle === null) return;
-
-    const newColor = prompt("Edit Yarn & Colors:", proj.color);
-    if (newColor === null) return;
-
-    const newTime = prompt("Edit Time Spent:", proj.time);
-    if (newTime === null) return;
-
-    const newNotes = prompt("Edit Notes:", proj.notes);
-    if (newNotes === null) return;
-
-    if (confirm("Save changes to this project entry?")) {
-      proj.title = newTitle.trim() || proj.title;
-      proj.color = newColor.trim() || proj.color;
-      proj.time = newTime.trim() || proj.time;
-      proj.notes = newNotes.trim() || proj.notes;
-      localStorage.setItem('z_projects', JSON.stringify(projects));
-      renderJournal();
+  window.deleteJournal = function(id) {
+    if (confirm("Delete this journal project entry?")) {
+      window.appData.projects = window.appData.projects.filter(p => p.id !== id);
+      window.syncToFirebase();
     }
-  }
-
-  function deleteJournal(id) {
-    if (confirm("Are you sure you want to delete this project entry?")) {
-      projects = projects.filter(p => p.id !== id);
-      localStorage.setItem('z_projects', JSON.stringify(projects));
-      renderJournal();
-    }
-  }
+  };
 
   function renderJournal() {
-    const list = document.getElementById('journal-list');
-    list.innerHTML = projects.length ? '' : '<p style="text-align:center; color:#88505b;">No projects logged yet 🌻</p>';
-    projects.forEach(p => {
-      list.innerHTML += `
+    const listContainer = document.getElementById('journal-list');
+    const list = window.appData.projects || [];
+    listContainer.innerHTML = list.length ? '' : '<p style="text-align:center; color:#88505b;">No projects logged yet 🌻</p>';
+    list.forEach(p => {
+      listContainer.innerHTML += `
         <div class="card">
           <div class="card-actions">
-            <button class="btn-small btn-edit" onclick="editJournal(${p.id})">✏️ Edit</button>
             <button class="btn-small btn-delete" onclick="deleteJournal(${p.id})">🗑️ Delete</button>
           </div>
           ${p.photo ? `<img src="${p.photo}" style="width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:8px;">` : ''}
@@ -881,88 +854,140 @@
     });
   }
 
-  // --- 4. PATTERN CHECKLIST LOGIC ---
-  const defaultPattern = [
-    { rnd: "Rnd 1", text: "Working into magic ring: 1ch, 6sc, ss = 6sts", note: "Place stitch marker in first stitch. Move marker up each rnd." },
-    { rnd: "Rnd 2", text: "1ch, 6inc, ss = 12sts" },
-    { rnd: "Rnd 3", text: "1ch, (sc, inc)*6 times, ss = 18sts" },
-    { rnd: "Rnd 4", text: "1ch, (sc, inc, sc)*6 times, ss = 24sts" },
-    { rnd: "Rnd 5", text: "1ch, (3sc, inc)*6 times, ss = 30sts" },
-    { rnd: "Rnd 6", text: "1ch, (2sc, inc, 2sc)*6 times, ss = 36sts" },
-    { rnd: "Rnd 7", text: "1ch, 36sc, ss = 36sts" },
-    { rnd: "Rnd 8", text: "1ch, 13sc, (3sc White yarn), 4sc, (3sc White yarn), 13sc, ss = 36sts" },
-    { rnd: "Rnd 9-10", text: "1ch, 12sc, (5sc White yarn), 2sc, (5sc White yarn), 12sc, ss = 36sts" },
-    { rnd: "Rnd 11-14", text: "1ch, 11sc, (14sc White yarn), 11sc, ss = 36sts" },
-    { rnd: "Rnd 15", text: "1ch, 12sc, (12sc White yarn), 12sc, ss = 36sts" },
-    { rnd: "Rnd 16", text: "1ch, 14sc, (8sc White yarn), 14sc, ss = 36sts" },
-    { rnd: "Rnd 17", text: "1ch, (2sc, dec, 2sc)*6 times, ss = 30sts" },
-    { rnd: "Rnd 18", text: "1ch, (3sc, dec)*6 times, ss = 24sts" },
-    { rnd: "Rnd 19", text: "1ch, (sc, dec, sc)*6 times, ss = 18sts", note: "Put in fiber fill, about 4g-6g" },
-    { rnd: "Rnd 20", text: "1ch, (sc, dec)*6 times, ss = 12sts" },
-    { rnd: "Rnd 21", text: "Pick up 12 FLO and tighten the opening, cut tail", note: "Hide the tail yarn inside the body" }
-  ];
-
-  let patternList = JSON.parse(localStorage.getItem('z_pattern_items')) || defaultPattern.map((p, i) => ({ ...p, id: i + 1, done: false }));
-
-  function togglePatternStep(id) {
-    const step = patternList.find(p => p.id === id);
-    if (step) {
-      step.done = !step.done;
-      saveAndRenderPattern();
-    }
-  }
-
-  function resetChecklist() {
-    if (confirm("Reset all pattern checklist items?")) {
-      patternList.forEach(p => p.done = false);
-      saveAndRenderPattern();
-    }
-  }
-
-  document.getElementById('custom-pattern-form').addEventListener('submit', (e) => {
+  // --- 4. PROJECT CHECKLIST LOGIC ---
+  document.getElementById('new-project-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const text = document.getElementById('p-step').value;
-    patternList.push({
-      id: Date.now(),
-      rnd: "Custom",
-      text: text,
-      done: false
+    const name = document.getElementById('np-name').value;
+    const yarn = document.getElementById('np-yarn').value;
+
+    if (!window.appData.checklistProjects) window.appData.checklistProjects = [];
+    window.appData.checklistProjects.push({
+      id: 'proj_' + Date.now(),
+      name: name,
+      yarn: yarn || '',
+      steps: [],
+      isOpen: true
     });
-    saveAndRenderPattern();
+    window.syncToFirebase();
     e.target.reset();
   });
 
-  function saveAndRenderPattern() {
-    localStorage.setItem('z_pattern_items', JSON.stringify(patternList));
-    const container = document.getElementById('checklist-container');
-    container.innerHTML = '';
+  window.toggleProjectExpand = function(projId) {
+    const proj = window.appData.checklistProjects.find(p => p.id === projId);
+    if (proj) {
+      proj.isOpen = !proj.isOpen;
+      window.syncToFirebase();
+    }
+  };
 
-    let completedCount = 0;
+  window.toggleChecklistStep = function(projId, stepId) {
+    const proj = window.appData.checklistProjects.find(p => p.id === projId);
+    if (proj && proj.steps) {
+      const step = proj.steps.find(s => s.id === stepId);
+      if (step) {
+        step.done = !step.done;
+        window.syncToFirebase();
+      }
+    }
+  };
 
-    patternList.forEach(item => {
-      if (item.done) completedCount++;
+  window.addCustomStepToProject = function(e, projId) {
+    e.preventDefault();
+    const rndInput = document.getElementById(`step-rnd-${projId}`);
+    const textInput = document.getElementById(`step-text-${projId}`);
+    const noteInput = document.getElementById(`step-note-${projId}`);
+
+    const proj = window.appData.checklistProjects.find(p => p.id === projId);
+    if (proj) {
+      if (!proj.steps) proj.steps = [];
+      proj.steps.push({
+        id: Date.now(),
+        rnd: rndInput.value.trim(),
+        text: textInput.value.trim(),
+        note: noteInput.value.trim(),
+        done: false
+      });
+      window.syncToFirebase();
+    }
+  };
+
+  window.deleteChecklistProject = function(projId) {
+    if (confirm("Are you sure you want to delete this whole project checklist?")) {
+      window.appData.checklistProjects = window.appData.checklistProjects.filter(p => p.id !== projId);
+      window.syncToFirebase();
+    }
+  };
+
+  window.resetProjectChecklist = function(projId) {
+    const proj = window.appData.checklistProjects.find(p => p.id === projId);
+    if (proj && proj.steps && confirm("Reset all checks for this project?")) {
+      proj.steps.forEach(s => s.done = false);
+      window.syncToFirebase();
+    }
+  };
+
+  function renderChecklistProjects() {
+    const container = document.getElementById('projects-container');
+    const projects = window.appData.checklistProjects || [];
+    container.innerHTML = projects.length ? '' : '<p style="text-align:center; color:#88505b;">No checklist projects created yet 🌻</p>';
+
+    projects.forEach(proj => {
+      const steps = proj.steps || [];
+      const completedCount = steps.filter(s => s.done).length;
+      const percent = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
+
+      let stepsHtml = '';
+      steps.forEach(step => {
+        stepsHtml += `
+          <div class="checklist-item ${step.done ? 'completed' : ''}" onclick="toggleChecklistStep('${proj.id}', ${step.id})">
+            <div class="checklist-checkbox">${step.done ? '✓' : ''}</div>
+            <div class="checklist-text">
+              <span class="rnd-tag">${step.rnd}:</span> ${step.text}
+              ${step.note ? `<span class="note-tag">📌 ${step.note}</span>` : ''}
+            </div>
+          </div>
+        `;
+      });
 
       container.innerHTML += `
-        <div class="checklist-item ${item.done ? 'completed' : ''}" onclick="togglePatternStep(${item.id})">
-          <div class="checklist-checkbox">${item.done ? '✓' : ''}</div>
-          <div class="checklist-text">
-            <span class="rnd-tag">${item.rnd}:</span> ${item.text}
-            ${item.note ? `<span class="note-tag">📌 ${item.note}</span>` : ''}
+        <div class="project-card ${proj.isOpen ? 'open' : ''}">
+          <div class="project-header" onclick="toggleProjectExpand('${proj.id}')">
+            <div>
+              <h3>🧶 ${proj.name}</h3>
+              ${proj.yarn ? `<p style="font-size:0.75rem; color:#7a4652; margin-top:2px;">Yarn: ${proj.yarn}</p>` : ''}
+            </div>
+            <span class="expand-icon">▼</span>
+          </div>
+
+          <div class="project-body">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+            </div>
+            <div style="font-size:0.75rem; color:#88505b; text-align:right; font-weight:bold; margin-bottom:10px;">
+              ${percent}% Completed (${completedCount}/${steps.length} steps)
+            </div>
+
+            <div style="display:flex; gap:6px; margin-bottom:12px;">
+              <button class="btn-small btn-edit" style="flex:1;" onclick="resetProjectChecklist('${proj.id}')">🔄 Reset Progress</button>
+              <button class="btn-small btn-delete" onclick="deleteChecklistProject('${proj.id}')">🗑️ Delete Project</button>
+            </div>
+
+            <div>${stepsHtml || '<p style="font-size:0.8rem; color:#888; text-align:center;">No steps added yet.</p>'}</div>
+
+            <div class="custom-step-box">
+              <h4>+ Add Custom Step to ${proj.name}</h4>
+              <form onsubmit="addCustomStepToProject(event, '${proj.id}')">
+                <input type="text" id="step-rnd-${proj.id}" placeholder="Rnd / Step Label (e.g. Rnd 22)" required>
+                <input type="text" id="step-text-${proj.id}" placeholder="Pattern Instruction / Description" required>
+                <input type="text" id="step-note-${proj.id}" placeholder="Extra Notes / Info (optional)">
+                <button type="submit" class="action-btn" style="padding:8px; font-size:0.8rem;">+ Add Step</button>
+              </form>
+            </div>
           </div>
         </div>
       `;
     });
-
-    const percent = patternList.length ? Math.round((completedCount / patternList.length) * 100) : 0;
-    document.getElementById('pattern-progress').style.width = percent + '%';
-    document.getElementById('progress-text').innerText = `${percent}% Completed (${completedCount}/${patternList.length} steps)`;
   }
-
-  // Initial Startup
-  saveAndRenderRemembers();
-  renderTechniques();
-  renderJournal();
-  saveAndRenderPattern();
 </script>
 
 </body>
